@@ -3,9 +3,12 @@ import requests
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes
 
-# ===== TOKENS (Railway ENV) =====
+# ===== TOKENS =====
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not TELEGRAM_TOKEN or not GEMINI_API_KEY:
+    raise ValueError("Faltando TELEGRAM_TOKEN ou GEMINI_API_KEY")
 
 # ===== MEMÓRIA =====
 memoria_usuarios = {}
@@ -30,7 +33,8 @@ def gerar_resposta(user_id, mensagem):
 
     contexto = "\n".join(memoria_usuarios[user_id])
 
-    url = https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent{GEMINI_API_KEY}"
+    # ✅ URL CORRIGIDA (v1beta)
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
 
     data = {
         "contents": [
@@ -52,7 +56,12 @@ def gerar_resposta(user_id, mensagem):
             return "Deu erro aqui... tenta de novo 😅"
 
         resposta = response.json()
-        texto = resposta["candidates"][0]["content"]["parts"][0]["text"]
+
+        try:
+            texto = resposta["candidates"][0]["content"]["parts"][0]["text"]
+        except:
+            print(resposta)
+            return "Não consegui responder isso 😅"
 
         memoria_usuarios[user_id].append(f"Luna: {texto}")
 
@@ -81,6 +90,6 @@ if __name__ == "__main__":
 
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, responder))
 
-    print("Bot Luna rodando com memória...")
+    print("Bot Luna rodando com Gemini 1.5 Flash...")
 
     app.run_polling()
