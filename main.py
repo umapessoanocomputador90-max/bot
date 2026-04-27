@@ -30,7 +30,7 @@ def gerar_resposta(user_id, mensagem):
 
     contexto = "\n".join(memoria_usuarios[user_id])
 
-    url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+    url = https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent{GEMINI_API_KEY}"
 
     data = {
         "contents": [
