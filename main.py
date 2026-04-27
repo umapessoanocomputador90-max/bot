@@ -13,7 +13,8 @@ if not TELEGRAM_TOKEN or not GEMINI_API_KEY:
 # ===== GEMINI SETUP =====
 genai.configure(api_key=GEMINI_API_KEY)
 
-model = genai.GenerativeModel("gemini-1.5-flash")
+# 🔥 MODELO ATUALIZADO
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 # ===== MEMÓRIA =====
 memoria_usuarios = {}
@@ -69,6 +70,6 @@ if __name__ == "__main__":
 
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, responder))
 
-    print("Bot Luna rodando com SDK oficial Gemini...")
+    print("Bot Luna rodando com Gemini 2.5 Flash...")
 
     app.run_polling()
